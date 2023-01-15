@@ -1,5 +1,8 @@
 require("dotenv").config();
 
+const doctorVerificatorInstance = require("./ethereum/instance-doctor-verificator");
+const web3 = require("./ethereum/web3");
+
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -38,20 +41,46 @@ app.get("/", (req, res) => {
 });
 
 app.get("/get/patient/records", cors(corsOptions), async (req, res) => {
-  console.log(req.query);
+  // console.log(req.query);
+  const [admin] = await web3.eth.getAccounts();
+  const address = req.query.address;
+  const isAddress = web3.utils.isAddress(address);
   const id = req.query.id;
   const page = parseInt(req.query.page);
   const skip = page === 1 ? 0 : page * 10;
 
-  if (req.query.page) {
-    const data = await Records.find().skip(skip).limit(20).exec();
-    res.status(200).send({ data });
-  } else if (req.query.id) {
-    const data = await Records.findById(id).exec()
-    console.log(data);
-    res.status(200).send({ data });
-  } else {
-    res.status(200).send({ message: "no query was specified" });
+  let access;
+  try {
+    if (isAddress) {
+      access = await doctorVerificatorInstance.methods.verify(address).call({
+        from: admin,
+      });
+    } else {
+      res.status(200).send({ message: `Address is ${isAddress}` });
+      return null;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (req.query.page && access) {
+    try {
+      const data = await Records.find().skip(skip).limit(20).exec();
+      res.status(200).send({ data });
+    } catch (err) {
+      console.log(err);
+      res.status(404).send(err);
+    }
+  } else if (req.query.id && access) {
+    try {
+      const data = await Records.findById(id).exec();
+      res.status(200).send({ data });
+    } catch (err) {
+      console.log(err);
+      res.status(404).send(err);
+    }
+  } else if (!access) {
+    res.status(200).send({ message: "Not Authorized" });
   }
 });
 

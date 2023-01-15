@@ -9,10 +9,13 @@
   "author": "faiz",
   "license": "ISC",
   "dependencies": {
+    "@truffle/hdwallet-provider": "^2.1.5",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
+    "fs-extra": "^11.1.0",
     "mongoose": "^6.8.3",
+    "solc": "^0.8.17",
     "web3": "^1.8.1"
   }
 }
