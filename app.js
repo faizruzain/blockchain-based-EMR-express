@@ -8,12 +8,7 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 const cors = require("cors");
-const corsOptions = {
-  methods: "GET",
-  allowedHeaders: {
-    "Content-Type": "application/json",
-  },
-};
+app.use(cors());
 
 const Records = require("./schemas/records");
 
@@ -40,7 +35,7 @@ app.get("/", (req, res) => {
   res.status(200).send({ message: `hello ${req.ip}` });
 });
 
-app.get("/get/patient/records", cors(corsOptions), async (req, res) => {
+app.get("/get/patient/records", async (req, res) => {
   // console.log(req.query);
   const [admin] = await web3.eth.getAccounts();
   const address = req.query.address;
@@ -79,6 +74,84 @@ app.get("/get/patient/records", cors(corsOptions), async (req, res) => {
       console.log(err);
       res.status(404).send(err);
     }
+  } else if (!access) {
+    res.status(200).send({ message: "Not Authorized" });
+  }
+});
+
+app.put("/get/patient/records", async (req, res) => {
+  // console.log(req.body);
+  const [admin] = await web3.eth.getAccounts();
+  const address = req.body.address;
+  const isAddress = web3.utils.isAddress(address);
+  const id = req.body._id;
+
+  let access;
+  try {
+    if (isAddress) {
+      access = await doctorVerificatorInstance.methods.verify(address).call({
+        from: admin,
+      });
+    } else {
+      res.status(200).send({ message: `Address is ${isAddress}` });
+      return null;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (address && access) {
+    const filter = {
+      _id: id,
+    };
+
+    const update = {
+      description: req.body.description,
+      medical_specialty: req.body.medical_specialty,
+      sample_name: req.body.sample_name,
+      transcription: req.body.transcription,
+    };
+
+    const doc = Records.findOneAndUpdate(filter, update, {
+      new: true,
+      upsert: true,
+    })
+      .lean()
+      .exec();
+
+    doc.then(async (doc) => {
+      if (doc) {
+        try {
+          // ["0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2", "Updating this (id) patient data", "24-12-2022"]
+          const d = new Date();
+          const date = d.toLocaleDateString("id-ID", {
+            dateStyle: "medium",
+          });
+          const time = d.toLocaleTimeString("id-ID", {
+            timeStyle: "short",
+          });
+          const dateAndTime = `${date} ${time}`;
+
+          await doctorVerificatorInstance.methods
+            .logThis([
+              address,
+              `Updating this ${id} patient record`,
+              dateAndTime,
+            ])
+            .send({
+              from: admin,
+              gas: "8000000",
+            })
+            .on("transactionHash", (transactionHash) => {
+              res
+                .status(200)
+                .send({ message: "Updated", transactionHash: transactionHash, newDoc: doc });
+            });
+        } catch (err) {
+          console.log(err);
+        }
+      }
+    });
   } else if (!access) {
     res.status(200).send({ message: "Not Authorized" });
   }

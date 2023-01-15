@@ -78,6 +78,10 @@ contract DoctorVerificator {
         logs[msg.sender].push(activity);
     }
 
+    function getAddressLogs(address _add) onlyAdmin public view returns(Logs[] memory _logs) {
+        return logs[_add];
+    }
+
     function getAllDoctors() onlyAdmin public view returns(address[] memory _address) {
         return doctors;
     }
