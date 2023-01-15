@@ -1,12 +1,12 @@
-import web3 from "./web3.js";
-import MedicalRecords from "./build/MedicalRecords.json";
+const web3 = require("./web3.js");
+const PatientVerificator = require("./build/PatientVerificator.json");
 
-const medicalRecordsinstance = new web3.eth.Contract(
-  MedicalRecords.abi,
-  "0xd0bF1870620Ee3c5f445bF3248afcFc1bEef36C8"
+const patientVerificatorInstance = new web3.eth.Contract(
+  PatientVerificator.abi,
+  "0x98a071B3928592Ba471b6C14ceaFD7C228b81fFA"
 );
 
-export default medicalRecordsinstance;
+module.exports = patientVerificatorInstance;
 
 // local latest
 

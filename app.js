@@ -1,6 +1,7 @@
 require("dotenv").config();
 
 const doctorVerificatorInstance = require("./ethereum/instance-doctor-verificator");
+const patientVerificatorInstance = require("./ethereum/instance-patient-verificator")
 const web3 = require("./ethereum/web3");
 
 const express = require("express");
@@ -143,9 +144,11 @@ app.put("/get/patient/records", async (req, res) => {
               gas: "8000000",
             })
             .on("transactionHash", (transactionHash) => {
-              res
-                .status(200)
-                .send({ message: "Updated", transactionHash: transactionHash, newDoc: doc });
+              res.status(200).send({
+                message: "Updated",
+                transactionHash: transactionHash,
+                newDoc: doc,
+              });
             });
         } catch (err) {
           console.log(err);
@@ -154,6 +157,39 @@ app.put("/get/patient/records", async (req, res) => {
     });
   } else if (!access) {
     res.status(200).send({ message: "Not Authorized" });
+  }
+});
+
+app.get("/verify", async (req, res) => {
+  const [admin] = await web3.eth.getAccounts();
+  const address = req.query.address;
+  const isAddress = web3.utils.isAddress(address);
+
+  let doctor;
+  let patient;
+  try {
+    if (isAddress) {
+      doctor = await doctorVerificatorInstance.methods.verify(address).call({
+        from: admin,
+      });
+
+      patient = await patientVerificatorInstance.methods.verify(address).call({
+        from: admin,
+      });
+    } else {
+      res.status(200).send({ message: `Address is ${isAddress}` });
+      return null;
+    }
+  } catch (err) {
+    console.log(err);
+  }
+
+  if (doctor) {
+    res.status(200).send({ role: "doctor" });
+  } else if (patient) {
+    res.status(200).send({ role: "patient" });
+  } else if (!doctor && !patient) {
+    res.status(200).send({ role: "unknown" });
   }
 });
 

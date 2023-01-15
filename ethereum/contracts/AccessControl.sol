@@ -12,14 +12,14 @@ contract PatientVerificator {
         admin = msg.sender;
     }
 
-    function addPatient(address _address) public {
+    function addPatient(address _address) onlyAdmin public {
         if (!patient[_address]) {
             patient[_address] = true;
             patients.push(_address); 
         }
     }
 
-    function verify(address _address) public view returns(bool _bool) {
+    function verify(address _address) onlyAdmin public view returns(bool _bool) {
         if(patient[_address]) {
             return true;
         } else {
