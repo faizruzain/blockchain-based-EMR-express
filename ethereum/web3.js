@@ -1,15 +1,15 @@
+require("dotenv").config();
 const HDWalletProvider = require("@truffle/hdwallet-provider");
 const Web3 = require("web3");
-// const web3 = new Web3("http://127.0.0.1:8545");
 
-const mnemonicPhrase =
-  "sand certain purity jazz duty clump void hamster kiwi correct high mass";
+const mnemonicPhrase = process.env.MNEMONIC
+const API = process.env.API
 
 let provider = new HDWalletProvider({
   mnemonic: {
     phrase: mnemonicPhrase,
   },
-  providerOrUrl: "http://127.0.0.1:8545",
+  providerOrUrl: API,
 });
 
 const web3 = new Web3(provider);

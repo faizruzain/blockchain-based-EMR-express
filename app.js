@@ -23,8 +23,8 @@ app.use(
 
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);
-const db = "mongodb://127.0.0.1:27017/skripsi";
-// const db = process.env.DB
+// const db = "mongodb://127.0.0.1:27017/skripsi";
+const db = process.env.DB
 main().catch((err) => console.log(err));
 
 async function main() {
