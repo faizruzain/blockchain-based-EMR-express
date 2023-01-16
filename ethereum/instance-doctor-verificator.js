@@ -3,22 +3,22 @@ const DoctorVerificator = require("./build/DoctorVerificator.json");
 
 const doctorVerificatorInstance = new web3.eth.Contract(
   DoctorVerificator.abi,
-  "0x7A1D6e16dE3bEB44f44c142191B051C81DcD79bf"
+  "0x5BbDc59F9bFe9836D789449370621471Ec6b647F"
 );
 
 module.exports = doctorVerificatorInstance;
 
 // Doctor_Verificator
 // {
-//   transactionHash: '0x035bc001097540cd29bef740fdd9fc8924aad9eabe901d51d70b7cbe2acc967d',
+//   transactionHash: '0x323b2006810beabe4486ffdfecc980f71145d9ac467e3b4fd5f37e3ff2801ffa',
 //   transactionIndex: 0,
-//   blockHash: '0x5004e88be71460f92da7ecd3d6d79acf5316b8189655cfa9996606ecab69cd0f',
-//   blockNumber: 76,
+//   blockHash: '0xd384da1c8adbc3132cc5f5cb0a0d47766a9736c5f93cf2aebba36765b4c44f40',
+//   blockNumber: 102,
 //   from: '0x4366c0d2b25a5614a136ee1124d15e16206b72ad',
 //   to: null,
-//   gasUsed: 1105312,
-//   cumulativeGasUsed: 1105312,
-//   contractAddress: '0xcD6574Df1118cD2b42Cc629A1367666F1739a49A',
+//   gasUsed: 1106152,
+//   cumulativeGasUsed: 1106152,
+//   contractAddress: '0x5BbDc59F9bFe9836D789449370621471Ec6b647F',
 //   status: true,
 //   logsBloom: '0x000000000000000000000000000000000000000000000000000000000000000000000000000000000
 // 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -32,15 +32,15 @@ module.exports = doctorVerificatorInstance;
 
 // Patient_Verificator
 // {
-//   transactionHash: '0x3e2943469b7f2c3cb1745398657645e4176f17f29ce89a22c6f67d502839444d',
+//   transactionHash: '0x4efdc6f82c698ac35c164e4d0b27a6d813e8363f5453f799b94a5985204cedb9',
 //   transactionIndex: 0,
-//   blockHash: '0x9ac54b5a29f0525729d4447110b8d2c203effe081700147310100ff7341e0947',
-//   blockNumber: 77,
+//   blockHash: '0x8e7b9b62cf1c9a1a3cd832424bf85231febdae7b0bd131b013ab8c27340ea84a',
+//   blockNumber: 103,
 //   from: '0x4366c0d2b25a5614a136ee1124d15e16206b72ad',
 //   to: null,
-//   gasUsed: 346368,
-//   cumulativeGasUsed: 346368,
-//   contractAddress: '0xc2f0CA1012133684dd95DD7272F47a717894F5b2',
+//   gasUsed: 384558,
+//   cumulativeGasUsed: 384558,
+//   contractAddress: '0x8d4b29d0C3d062662fB008639a325A18FE2137d9',
 //   status: true,
 //   logsBloom: '0x000000000000000000000000000000000000000000000000000000000000000000000000000000000
 // 0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000

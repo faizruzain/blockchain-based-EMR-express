@@ -75,7 +75,7 @@ contract DoctorVerificator {
         activity.add = _logs.add;
         activity.activity = _logs.activity;
         activity.dateAndTime = _logs.dateAndTime;
-        logs[msg.sender].push(activity);
+        logs[_logs.add].push(activity);
     }
 
     function getAddressLogs(address _add) onlyAdmin public view returns(Logs[] memory _logs) {
