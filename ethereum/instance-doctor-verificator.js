@@ -3,7 +3,7 @@ const DoctorVerificator = require("./build/DoctorVerificator.json");
 
 const doctorVerificatorInstance = new web3.eth.Contract(
   DoctorVerificator.abi,
-  "0x5BbDc59F9bFe9836D789449370621471Ec6b647F"
+  "0xba559af1e29ed2a263c14eaa32036b0f1981f0cd"
 );
 
 module.exports = doctorVerificatorInstance;
