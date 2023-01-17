@@ -46,9 +46,14 @@ app.get("/get/patient/records", async (req, res) => {
   const skip = page === 1 ? 0 : page * 10;
 
   let access;
+  let patient;
   try {
     if (isAddress) {
       access = await doctorVerificatorInstance.methods.verify(address).call({
+        from: admin,
+      });
+
+      patient = await patientVerificatorInstance.methods.verify(address).call({
         from: admin,
       });
     } else {
@@ -67,7 +72,7 @@ app.get("/get/patient/records", async (req, res) => {
       console.log(err);
       res.status(404).send(err);
     }
-  } else if (req.query.id && access) {
+  } else if (req.query.id && access || req.query.id && patient) {
     try {
       const data = await Records.findById(id).exec();
       res.status(200).send({ data });
@@ -141,7 +146,6 @@ app.put("/get/patient/records", async (req, res) => {
             ])
             .send({
               from: admin,
-              gas: "8000000",
             })
             .on("transactionHash", (transactionHash) => {
               res.status(200).send({
@@ -240,7 +244,6 @@ app.post("/add-new-record", async (req, res) => {
         .logThis([address, `Added new patient records`, dateAndTime])
         .send({
           from: admin,
-          gas: "8000000",
         })
         .on("transactionHash", (transactionHash) => {
           res.status(200).send({
